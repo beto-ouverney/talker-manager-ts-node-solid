@@ -1,3 +1,5 @@
+import fs from 'fs/promises';
+
 class TalkerModel {
   name: string;
   age: number;
@@ -9,6 +11,16 @@ class TalkerModel {
     this.age = age;
     this.id = id;
     this.talk = talk;
+  }
+
+  async getFromData() {
+    try {
+      const data = await fs.readFile('./talker.json', 'utf-8');
+      const talkers = JSON.parse(data);
+      return talkers;
+    } catch (e) {
+      return [];
+    }
   }
 }
 
