@@ -2,15 +2,13 @@ import { TalkerModel } from '../model/TalkerModel';
 import { ITalkerRepository } from '../repositories/ITalkerRepository';
 
 class GetAllTalkersUseCase {
-  talkersRepository: ITalkerRepository;
+  iTalkersRepository: ITalkerRepository;
 
   constructor(talkerRepository: ITalkerRepository) {
-    this.talkersRepository = talkerRepository;
+    this.iTalkersRepository = talkerRepository;
   }
   async execute(): Promise<TalkerModel[]> {
-    const talkers = await this.talkersRepository.getAllTalkers();
-    console.log('TESTE');
-    console.log(talkers);
+    const talkers = await this.iTalkersRepository.getAllTalkers();
     return talkers;
   }
 }

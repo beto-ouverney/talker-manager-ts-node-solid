@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getAllTalkersRoute } from './GetAllTalkers.routes';
+import { talkerRoutes } from './Talker.routes';
 
 const router = Router();
 
-router.use(getAllTalkersRoute);
+router.use(talkerRoutes);
 
 export { router };

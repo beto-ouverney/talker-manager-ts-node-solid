@@ -6,7 +6,7 @@ import fs from 'fs/promises';
 class TalkerRepository implements ITalkerRepository {
   private static INSTANCE: TalkerRepository;
 
-  public static getInstance(): TalkerRepository {
+  public static getInstance() {
     if (!TalkerRepository.INSTANCE) {
       TalkerRepository.INSTANCE = new TalkerRepository();
     }
@@ -21,6 +21,12 @@ class TalkerRepository implements ITalkerRepository {
     } catch (e) {
       return [];
     }
+  }
+
+  async getTalker(id: number): Promise<TalkerModel> {
+    const talkers = await this.getFromData();
+    const talker = talkers.find((e: TalkerModel) => e.id === id);
+    return talker;
   }
 
   getAllTalkers(): Promise<TalkerModel[]> {
