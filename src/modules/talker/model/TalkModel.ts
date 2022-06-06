@@ -7,3 +7,5 @@ class TalkModel {
     this.rate = rate;
   }
 }
+
+export { TalkModel };

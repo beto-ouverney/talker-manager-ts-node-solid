@@ -32,6 +32,17 @@ class TalkerRepository implements ITalkerRepository {
   getAllTalkers(): Promise<TalkerModel[]> {
     return this.getFromData();
   }
+
+  async createTalker(talker: TalkerModel): Promise<TalkerModel> {
+    const data = await this.getFromData();
+    const talkers = data.sort((a: TalkerModel, b: TalkerModel) => a.id - b.id);
+    const { id } = talkers[talkers.length - 1];
+    talker.id = id + 1;
+    talkers.push(talker);
+    const talkersToWfrite = JSON.stringify(talkers);
+    await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
+    return talker;
+  }
 }
 
 export { TalkerRepository };
