@@ -43,6 +43,15 @@ class TalkerRepository implements ITalkerRepository {
     await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
     return talker;
   }
+
+  async editTalker(talker: TalkerModel): Promise<TalkerModel> {
+    const data = await this.getFromData();
+    const talkers = data.filter((e: TalkerModel) => e.id !== talker.id);
+    talkers.push(talker);
+    const talkersToWfrite = JSON.stringify(talkers);
+    await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
+    return talker;
+  }
 }
 
 export { TalkerRepository };

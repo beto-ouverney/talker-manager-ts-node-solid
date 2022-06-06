@@ -8,25 +8,34 @@ class TalkerValidations {
     this.talker = talker;
   }
 
-  validateTalker() {
+  checkEmptyValues() {
     if (!this.talker.name || this.talker.name === '') {
       return error.nameIsRequired;
-    }
-    if (this.talker.name.length < 3) {
-      return error.invalidName;
     }
     if (!this.talker.age) {
       return error.ageIsRequired;
     }
+    if (!this.talker.talk) {
+      return error.talkIsRequired;
+    }
+    const { watchedAt, rate } = this.talker.talk;
+    if (!watchedAt || rate === undefined) {
+      console.log(rate);
+      return error.talkIsRequired;
+    }
+  }
+
+  validateTalker() {
+    const errorEmptyValues = this.checkEmptyValues();
+    if (errorEmptyValues) {
+      return errorEmptyValues;
+    }
+    if (this.talker.name.length < 3) {
+      return error.invalidName;
+    }
+
     if (this.talker.age < 18) {
       return error.invalidAge;
-    }
-    if (
-      !this.talker.talk ||
-      !this.talker.talk.watchedAt ||
-      !this.talker.talk.rate
-    ) {
-      return error.talkIsRequired;
     }
 
     const dateFormat = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
