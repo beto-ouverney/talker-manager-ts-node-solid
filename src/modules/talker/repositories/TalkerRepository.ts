@@ -52,6 +52,14 @@ class TalkerRepository implements ITalkerRepository {
     await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
     return talker;
   }
+
+  async deleteTalker(id: number) {
+    const data = await this.getFromData();
+    const talkers = data.filter((e: TalkerModel) => e.id !== id);
+    const talkersToWfrite = JSON.stringify(talkers);
+    await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
+    return 204;
+  }
 }
 
 export { TalkerRepository };
