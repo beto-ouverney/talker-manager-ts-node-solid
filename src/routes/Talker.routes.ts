@@ -4,8 +4,13 @@ import { deleteTalkerImplementation } from '../modules/talker/implementations/De
 import { editTalkerImplementation } from '../modules/talker/implementations/EditTalkerImplementation';
 import { getAllTalkersImplementation } from '../modules/talker/implementations/GetAllTalkerImplementation';
 import { getTalkerByIdImplementation } from '../modules/talker/implementations/GetTalkerByIdImplementation';
+import { searchTalkerImplementation } from '../modules/talker/implementations/SearchTalkerImplementation';
 
 const talkerRoutes = Router();
+
+talkerRoutes.get('/talker/search', async (request, response) => {
+  return await searchTalkerImplementation.handle(request, response);
+});
 
 talkerRoutes.get('/talker', async (request, response) => {
   return await getAllTalkersImplementation.handle(request, response);

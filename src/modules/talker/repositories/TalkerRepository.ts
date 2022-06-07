@@ -60,6 +60,12 @@ class TalkerRepository implements ITalkerRepository {
     await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
     return 204;
   }
+
+  async searchTalker(search: string): Promise<TalkerModel[]> {
+    const data = await this.getFromData();
+    const talkers = data.filter((e: TalkerModel) => e.name.includes(search));
+    return talkers;
+  }
 }
 
 export { TalkerRepository };

@@ -7,6 +7,7 @@ interface ITalkerRepository {
   createTalker(talker: TalkerModel): Promise<TalkerModel>;
   editTalker(talker: TalkerModel): Promise<TalkerModel>;
   deleteTalker(id: number): Promise<number>;
+  searchTalker(search: string): Promise<TalkerModel[]>;
 }
 
 export { ITalkerRepository };
