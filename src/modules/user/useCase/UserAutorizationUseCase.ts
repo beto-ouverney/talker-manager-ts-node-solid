@@ -1,4 +1,4 @@
-import { UserModel } from '../model/UserModel';
+import { User } from '../model/User';
 import { IUserRepository } from '../repositories/IUserRepository';
 
 class UserAutorizationUseCase {
@@ -8,7 +8,7 @@ class UserAutorizationUseCase {
     this.iUserRepository = iUserRepository;
   }
 
-  getToken(user: UserModel) {
+  getToken(user: User) {
     const token = this.iUserRepository.getToken(user);
     return token;
   }

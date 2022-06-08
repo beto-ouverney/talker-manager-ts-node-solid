@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { UserModel } from '../model/UserModel';
+import { User } from '../model/User';
 import { IUserRepository } from './IUserRepository';
 
 class UserRepository implements IUserRepository {
@@ -12,7 +12,7 @@ class UserRepository implements IUserRepository {
     return UserRepository.INSTANCE;
   }
 
-  getToken(user: UserModel) {
+  getToken(user: User) {
     const token = CryptoJS.AES.encrypt(user.email, user.password);
     return token.salt.toString();
   }

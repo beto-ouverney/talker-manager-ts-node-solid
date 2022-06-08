@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { TalkerValidations } from '../integrations/TalkerValidations';
 import { TokenValidations } from '../integrations/TokenValidations';
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import { EditTalkerUseCase } from '../useCase/EditTalkerUseCase';
 
 class EditTalkerController {
@@ -27,7 +27,7 @@ class EditTalkerController {
       body: { name, age, talk },
     } = request;
     const { id } = request.params;
-    const talker = new TalkerModel(name, Number(age), Number(id), talk);
+    const talker = new Talker(name, Number(age), Number(id), talk);
     const talkerValidations = new TalkerValidations(talker);
     const errorTalker = talkerValidations.validateTalker();
     if (errorTalker) {

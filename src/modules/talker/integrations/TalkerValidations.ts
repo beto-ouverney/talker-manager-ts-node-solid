@@ -1,10 +1,10 @@
 import { error } from '../../../data/error';
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 
 class TalkerValidations {
-  talker: TalkerModel;
+  talker: Talker;
 
-  constructor(talker: TalkerModel) {
+  constructor(talker: Talker) {
     this.talker = talker;
   }
 

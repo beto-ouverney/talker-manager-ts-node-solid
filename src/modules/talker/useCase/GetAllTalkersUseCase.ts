@@ -1,4 +1,4 @@
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import { ITalkerRepository } from '../repositories/ITalkerRepository';
 
 class GetAllTalkersUseCase {
@@ -7,7 +7,7 @@ class GetAllTalkersUseCase {
   constructor(talkerRepository: ITalkerRepository) {
     this.iTalkersRepository = talkerRepository;
   }
-  async execute(): Promise<TalkerModel[]> {
+  async execute(): Promise<Talker[]> {
     const talkers = await this.iTalkersRepository.getAllTalkers();
     return talkers;
   }

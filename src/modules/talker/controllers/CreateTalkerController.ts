@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { error } from '../../../data/error';
 import { TalkerValidations } from '../integrations/TalkerValidations';
 import { TokenValidations } from '../integrations/TokenValidations';
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import { CreateTalkerUseCase } from '../useCase/CreateTalkerUseCase';
 
 class CreateTalkerController {
@@ -26,7 +26,7 @@ class CreateTalkerController {
     const {
       body: { name, age, talk },
     } = request;
-    const newTalker = new TalkerModel(name, Number(age), 0, talk);
+    const newTalker = new Talker(name, Number(age), 0, talk);
     const talkerValidations = new TalkerValidations(newTalker);
     const errorTalker = talkerValidations.validateTalker();
     if (errorTalker) {

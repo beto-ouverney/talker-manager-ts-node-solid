@@ -1,9 +1,9 @@
 import { error } from '../../../data/error';
-import { UserModel } from '../model/UserModel';
+import { User } from '../model/User';
 
 class UserValidations {
-  user: UserModel;
-  constructor(user: UserModel) {
+  user: User;
+  constructor(user: User) {
     this.user = user;
   }
 

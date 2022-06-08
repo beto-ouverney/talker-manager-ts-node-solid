@@ -1,4 +1,4 @@
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import { ITalkerRepository } from '../repositories/ITalkerRepository';
 
 class EditTalkerUseCase {
@@ -7,7 +7,7 @@ class EditTalkerUseCase {
     this.iTalkerRepository = iTalkerRepository;
   }
 
-  execute(talker: TalkerModel): Promise<TalkerModel> {
+  execute(talker: Talker): Promise<Talker> {
     const talkerEdited = this.iTalkerRepository.editTalker(talker);
     return talkerEdited;
   }

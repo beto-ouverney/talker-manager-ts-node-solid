@@ -1,4 +1,4 @@
-class TalkModel {
+class Talk {
   watchedAt: Date;
   rate: number;
 
@@ -8,4 +8,4 @@ class TalkModel {
   }
 }
 
-export { TalkModel };
+export { Talk };

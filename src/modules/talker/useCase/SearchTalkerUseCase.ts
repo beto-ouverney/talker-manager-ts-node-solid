@@ -1,4 +1,4 @@
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import { ITalkerRepository } from '../repositories/ITalkerRepository';
 
 class SearchTalkerUseCase {
@@ -7,7 +7,7 @@ class SearchTalkerUseCase {
     this.iTalkerRepository = iTalkerRepository;
   }
 
-  async execute(search: string): Promise<TalkerModel[]> {
+  async execute(search: string): Promise<Talker[]> {
     const result = await this.iTalkerRepository.searchTalker(search);
     return result;
   }

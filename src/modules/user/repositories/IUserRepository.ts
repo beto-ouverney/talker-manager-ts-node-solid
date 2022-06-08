@@ -1,7 +1,7 @@
-import { UserModel } from '../model/UserModel';
+import { User } from '../model/User';
 
 interface IUserRepository {
-  getToken(user: UserModel): string;
+  getToken(user: User): string;
 }
 
 export { IUserRepository };

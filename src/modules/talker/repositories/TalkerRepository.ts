@@ -1,4 +1,4 @@
-import { TalkerModel } from '../model/TalkerModel';
+import { Talker } from '../entities/Talker';
 import data from '../../../../talker.json';
 import { ITalkerRepository } from './ITalkerRepository';
 import fs from 'fs/promises';
@@ -23,19 +23,19 @@ class TalkerRepository implements ITalkerRepository {
     }
   }
 
-  async getTalker(id: number): Promise<TalkerModel> {
+  async getTalker(id: number): Promise<Talker> {
     const talkers = await this.getFromData();
-    const talker = talkers.find((e: TalkerModel) => e.id === id);
+    const talker = talkers.find((e: Talker) => e.id === id);
     return talker;
   }
 
-  getAllTalkers(): Promise<TalkerModel[]> {
+  getAllTalkers(): Promise<Talker[]> {
     return this.getFromData();
   }
 
-  async createTalker(talker: TalkerModel): Promise<TalkerModel> {
+  async createTalker(talker: Talker): Promise<Talker> {
     const data = await this.getFromData();
-    const talkers = data.sort((a: TalkerModel, b: TalkerModel) => a.id - b.id);
+    const talkers = data.sort((a: Talker, b: Talker) => a.id - b.id);
     const { id } = talkers[talkers.length - 1];
     talker.id = id + 1;
     talkers.push(talker);
@@ -44,9 +44,9 @@ class TalkerRepository implements ITalkerRepository {
     return talker;
   }
 
-  async editTalker(talker: TalkerModel): Promise<TalkerModel> {
+  async editTalker(talker: Talker): Promise<Talker> {
     const data = await this.getFromData();
-    const talkers = data.filter((e: TalkerModel) => e.id !== talker.id);
+    const talkers = data.filter((e: Talker) => e.id !== talker.id);
     talkers.push(talker);
     const talkersToWfrite = JSON.stringify(talkers);
     await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
@@ -55,15 +55,15 @@ class TalkerRepository implements ITalkerRepository {
 
   async deleteTalker(id: number) {
     const data = await this.getFromData();
-    const talkers = data.filter((e: TalkerModel) => e.id !== id);
+    const talkers = data.filter((e: Talker) => e.id !== id);
     const talkersToWfrite = JSON.stringify(talkers);
     await fs.writeFile('./talker.json', talkersToWfrite, 'utf-8');
     return 204;
   }
 
-  async searchTalker(search: string): Promise<TalkerModel[]> {
+  async searchTalker(search: string): Promise<Talker[]> {
     const data = await this.getFromData();
-    const talkers = data.filter((e: TalkerModel) => e.name.includes(search));
+    const talkers = data.filter((e: Talker) => e.name.includes(search));
     return talkers;
   }
 }

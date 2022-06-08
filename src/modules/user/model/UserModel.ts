@@ -1,4 +1,4 @@
-class UserModel {
+class User {
   email: string;
   password: string;
   constructor(email: string, password: string) {
@@ -7,4 +7,4 @@ class UserModel {
   }
 }
 
-export { UserModel };
+export { User };
