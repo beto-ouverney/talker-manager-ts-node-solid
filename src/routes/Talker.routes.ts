@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { createTalkerImplementation } from '../modules/talker/implementations/CreateTalkerImplementation';
-import { deleteTalkerImplementation } from '../modules/talker/implementations/DeleteTalkerImplementation';
-import { editTalkerImplementation } from '../modules/talker/implementations/EditTalkerImplementation';
-import { getAllTalkersImplementation } from '../modules/talker/implementations/GetAllTalkerImplementation';
-import { getTalkerByIdImplementation } from '../modules/talker/implementations/GetTalkerByIdImplementation';
-import { searchTalkerImplementation } from '../modules/talker/implementations/SearchTalkerImplementation';
+import { createTalkerIntegration } from '../modules/talker/integrations/createTalkerIntegration';
+import { deleteTalkerIntegration } from '../modules/talker/integrations/DeleteTalkerIntegration';
+import { editTalkerIntegration } from '../modules/talker/integrations/EditTalkerIntegration';
+import { getAllTalkersIntegration } from '../modules/talker/integrations/GetAllTalkerIntegration';
+import { getTalkerByIdIntegration } from '../modules/talker/integrations/getTalkerByIdIntegration';
+import { searchTalkerIntegration } from '../modules/talker/integrations/SearchTalkerIntegration';
 import { talkerValidations } from '../modules/talker/middlewares/talkerValidations';
 import { tokenValidations } from '../modules/talker/middlewares/tokenValidations';
 
@@ -14,16 +14,16 @@ talkerRoutes.get(
   '/talker/search',
   tokenValidations,
   async (request, response) => {
-    return await searchTalkerImplementation.handle(request, response);
+    return await searchTalkerIntegration.handle(request, response);
   }
 );
 
 talkerRoutes.get('/talker', async (request, response) => {
-  return await getAllTalkersImplementation.handle(request, response);
+  return await getAllTalkersIntegration.handle(request, response);
 });
 
 talkerRoutes.get('/talker/:id', async (request, response) => {
-  return await getTalkerByIdImplementation.handle(request, response);
+  return await getTalkerByIdIntegration.handle(request, response);
 });
 
 talkerRoutes.post(
@@ -31,7 +31,7 @@ talkerRoutes.post(
   tokenValidations,
   talkerValidations,
   async (request, response) => {
-    return await createTalkerImplementation.handle(request, response);
+    return await createTalkerIntegration.handle(request, response);
   }
 );
 
@@ -40,7 +40,7 @@ talkerRoutes.put(
   tokenValidations,
   talkerValidations,
   async (request, response) => {
-    return await editTalkerImplementation.handle(request, response);
+    return await editTalkerIntegration.handle(request, response);
   }
 );
 
@@ -48,7 +48,7 @@ talkerRoutes.delete(
   '/talker/:id',
   tokenValidations,
   async (request, response) => {
-    return await deleteTalkerImplementation.handle(request, response);
+    return await deleteTalkerIntegration.handle(request, response);
   }
 );
 

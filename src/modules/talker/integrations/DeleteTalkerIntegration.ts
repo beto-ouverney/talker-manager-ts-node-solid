@@ -4,8 +4,6 @@ import { DeleteTalkerUseCase } from '../useCase/DeleteTalkerUseCase';
 
 const talkerRepository = TalkerRepository.getInstance();
 const deleteTalkerUseCase = new DeleteTalkerUseCase(talkerRepository);
-const deleteTalkerImplementation = new DeleteTalkerController(
-  deleteTalkerUseCase
-);
+const deleteTalkerIntegration = new DeleteTalkerController(deleteTalkerUseCase);
 
-export { deleteTalkerImplementation };
+export { deleteTalkerIntegration };

@@ -4,6 +4,6 @@ import { EditTalkerUseCase } from '../useCase/EditTalkerUseCase';
 
 const talkerRepository = TalkerRepository.getInstance();
 const editTalkerUseCase = new EditTalkerUseCase(talkerRepository);
-const editTalkerImplementation = new EditTalkerController(editTalkerUseCase);
+const editTalkerIntegration = new EditTalkerController(editTalkerUseCase);
 
-export { editTalkerImplementation };
+export { editTalkerIntegration };

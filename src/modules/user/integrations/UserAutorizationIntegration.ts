@@ -1,11 +1,11 @@
 import { UserAutorizationController } from '../controllers/UserAutorizationController';
-import { UserRepository } from '../repositories/UserRepository';
+import { GetTokenUserImplementation } from '../implementations/GetTokenUserImplementation';
 import { UserAutorizationUseCase } from '../useCase/UserAutorizationUseCase';
 
-const userRepository = UserRepository.getInstance();
+const userRepository = new GetTokenUserImplementation();
 const userAutorizationUseCase = new UserAutorizationUseCase(userRepository);
-const userAutorizationImplementation = new UserAutorizationController(
+const userAutorizationIntegration = new UserAutorizationController(
   userAutorizationUseCase
 );
 
-export { userAutorizationImplementation };
+export { userAutorizationIntegration };

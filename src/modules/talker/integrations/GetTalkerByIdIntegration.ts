@@ -4,8 +4,8 @@ import { GetTalkerByIdUseCase } from '../useCase/GetTalkerByIdUseCase';
 
 const talkerRepository = TalkerRepository.getInstance();
 const getTalkerByIdUseCase = new GetTalkerByIdUseCase(talkerRepository);
-const getTalkerByIdImplementation = new GetTalkerByIdController(
+const getTalkerByIdIntegration = new GetTalkerByIdController(
   getTalkerByIdUseCase
 );
 
-export { getTalkerByIdImplementation };
+export { getTalkerByIdIntegration };
