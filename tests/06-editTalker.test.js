@@ -4,17 +4,17 @@ const path = require('path');
 
 const url = 'http://localhost:3000';
 
-describe('5 - Crie o endpoint PUT /talker/:id', () => {
+describe('6 - Crie o endpoint PUT /talker/:id', () => {
   beforeEach(() => {
     const talkerMock = fs.readFileSync(
       path.join(__dirname, 'seed.json'),
-      'utf8'
+      'utf8',
     );
 
     fs.writeFileSync(
       path.join(__dirname, '..', 'talker.json'),
       talkerMock,
-      'utf8'
+      'utf8',
     );
   });
 
@@ -83,17 +83,17 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .expect('status', 200)
           .then((responseUpdate) => {
             expect(require('../talker.json')).toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining({
+              expect.arrayContaining([
+                expect.objectContaining({
                   id: resultTalker.id,
                   name: 'Zendaya',
                   age: 25,
                   talk: {
                     watchedAt: '24/10/2020',
                     rate: 4,
-                  }
-                })]
-              )
+                  },
+                }),
+              ]),
             );
             const { json } = responseUpdate;
             expect(json.id).toBe(resultTalker.id);
@@ -242,7 +242,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O "name" deve ter pelo menos 3 caracteres'
+              'O "name" deve ter pelo menos 3 caracteres',
             );
           });
       });
@@ -384,7 +384,9 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .expect('status', 400)
           .then((responseUpdate) => {
             const { json } = responseUpdate;
-            expect(json.message).toBe('A pessoa palestrante deve ser maior de idade');
+            expect(json.message).toBe(
+              'A pessoa palestrante deve ser maior de idade',
+            );
           });
       });
   });
@@ -452,7 +454,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório',
             );
           });
       });
@@ -524,7 +526,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "rate" é obrigatório',
             );
           });
       });
@@ -597,7 +599,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -670,7 +672,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -742,7 +744,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "watchedAt" é obrigatório',
             );
           });
       });
@@ -750,6 +752,16 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
 
   it('Será validado que não é possível editar uma pessoa palestrante com watchedAt sem o formato "dd/mm/aaaa"', async () => {
     let resultTalker;
+    const dataTestArray = [
+      '42-20-3333',
+      '0/0/0',
+      '12/7/25',
+      '/11/',
+      '01/12',
+      '//',
+      '010332',
+      '02/mar/1988',
+    ];
 
     await frisby
       .post(`${url}/login`, {
@@ -783,42 +795,43 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             resultTalker = JSON.parse(body);
           });
       });
-
-    await frisby
-      .post(`${url}/login`, {
-        body: {
-          email: 'deferiascomigo@gmail.com',
-          password: '12345678',
-        },
-      })
-      .then((responseLogin) => {
-        const { body } = responseLogin;
-        const result = JSON.parse(body);
-        return frisby
-          .setup({
-            request: {
-              headers: {
-                Authorization: result.token,
-                'Content-Type': 'application/json',
+    for (let i = 0; i < dataTestArray.length; i++) {
+      await frisby
+        .post(`${url}/login`, {
+          body: {
+            email: 'deferiascomigo@gmail.com',
+            password: '12345678',
+          },
+        })
+        .then((responseLogin) => {
+          const { body } = responseLogin;
+          const result = JSON.parse(body);
+          return frisby
+            .setup({
+              request: {
+                headers: {
+                  Authorization: result.token,
+                  'Content-Type': 'application/json',
+                },
               },
-            },
-          })
-          .put(`${url}/talker/${resultTalker.id}`, {
-            name: 'Zendaya',
-            age: 25,
-            talk: {
-              watchedAt: '42-20-3333',
-              rate: 4,
-            },
-          })
-          .expect('status', 400)
-          .then((responseUpdate) => {
-            const { json } = responseUpdate;
-            expect(json.message).toBe(
-              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"'
-            );
-          });
-      });
+            })
+            .put(`${url}/talker/${resultTalker.id}`, {
+              name: 'Zendaya',
+              age: 25,
+              talk: {
+                watchedAt: dataTestArray[i],
+                rate: 4,
+              },
+            })
+            .expect('status', 400)
+            .then((responseUpdate) => {
+              const { json } = responseUpdate;
+              expect(json.message).toBe(
+                'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+              );
+            });
+        });
+    }
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem estar autorizado', async () => {
@@ -878,76 +891,36 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com token inválido', async () => {
-    let resultTalker;
+    const invalidTokens = [99999999, '99999999', '123456789012345'];
 
-    await frisby
-      .post(`${url}/login`, {
-        email: 'deferiascomigo@gmail.com',
-        password: '12345678',
-      })
-      .expect('status', 200)
-      .then((responseLogin) => {
-        const { body } = responseLogin;
-        const result = JSON.parse(body);
-        return frisby
-          .setup({
-            request: {
-              headers: {
-                Authorization: result.token,
-                'Content-Type': 'application/json',
-              },
+    for (let i = 0; i < invalidTokens.length; i++) {
+      await frisby
+        .setup({
+          request: {
+            headers: {
+              Authorization: invalidTokens[i],
+              'Content-Type': 'application/json',
             },
-          })
-          .post(`${url}/talker`, {
-            name: 'Zendaya Maree',
-            age: 24,
-            talk: {
-              watchedAt: '25/09/2020',
-              rate: 5,
-            },
-          })
-          .expect('status', 201)
-          .then((responseCreate) => {
-            const { body } = responseCreate;
-            resultTalker = JSON.parse(body);
-          });
-      });
-
-    await frisby
-      .post(`${url}/login`, {
-        body: {
-          email: 'deferiascomigo@gmail.com',
-          password: '12345678',
-        },
-      })
-      .then(() =>
-        frisby
-          .setup({
-            request: {
-              headers: {
-                Authorization: '9999999',
-                'Content-Type': 'application/json',
-              },
-            },
-          })
-          .put(`${url}/talker/${resultTalker.id}`, {
-            name: 'Zendaya',
-            age: 25,
-            talk: {
-              watchedAt: '24/10/2020',
-              rate: 4,
-            },
-          })
-          .expect('status', 401)
-          .then((responseUpdate) => {
-            const { json } = responseUpdate;
-            expect(json.message).toBe('Token inválido');
-          })
-      );
+          },
+        })
+        .put(`${url}/talker/1`, {
+          name: 'Zendaya',
+          age: 25,
+          talk: {
+            watchedAt: '24/10/2020',
+            rate: 4,
+          },
+        })
+        .expect('status', 401)
+        .then((responseUpdate) => {
+          const { json } = responseUpdate;
+          expect(json.message).toBe('Token inválido');
+        });
+    }
   });
 });

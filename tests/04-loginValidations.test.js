@@ -2,23 +2,8 @@ const frisby = require('frisby');
 
 const url = 'http://localhost:3000';
 
-describe('3 - Crie o endpoint POST /login', () => {
-  it('Será validado que o endpoint deve ser capaz de retornar um token aleatório de 16 caracteres', async () => {
-    await frisby
-      .post(`${url}/login`, {
-        body: {
-          email: 'deferiascomigo@gmail.com',
-          password: '12345678',
-        },
-      })
-      .expect('status', 200)
-      .then((responseLogin) => {
-        const { body } = responseLogin;
-        const result = JSON.parse(body);
-        expect(result.token.length).toBe(16);
-      });
-  });
-
+describe('4 - Adicione as validações para o endpoint /login', () => {
+ 
   it('Será validado que não é possível fazer login sem o campo "email"', async () => {
     await frisby
       .post(`${url}/login`, {
@@ -34,7 +19,7 @@ describe('3 - Crie o endpoint POST /login', () => {
       });
   });
 
-  it('Será validado que não é fazer login sem um email no formato "email@email.com"', async () => {
+  it('Será validado que não é possível fazer login sem um email no formato "email@email.com"', async () => {
     await frisby
       .post(`${url}/login`, {
         body: {

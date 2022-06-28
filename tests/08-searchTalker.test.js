@@ -5,17 +5,17 @@ const talkersSeed = require('./seed.json');
 
 const url = 'http://localhost:3000';
 
-describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
+describe('8 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
   beforeEach(() => {
     const talkerSeed = fs.readFileSync(
       path.join(__dirname, 'seed.json'),
-      'utf8'
+      'utf8',
     );
 
     fs.writeFileSync(
       path.join(__dirname, '..', 'talker.json'),
       talkerSeed,
-      'utf8'
+      'utf8',
     );
   });
 
@@ -87,7 +87,38 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
                     rate: 4,
                   },
                 }),
-              ])
+              ]),
+            );
+            expect(json).toEqual(
+              expect.not.arrayContaining([
+                {
+                  name: 'Henrique Albuquerque',
+                  age: 62,
+                  id: 1,
+                  talk: {
+                    watchedAt: '23/10/2020',
+                    rate: 5,
+                  },
+                },
+                {
+                  name: 'Heloísa Albuquerque',
+                  age: 67,
+                  id: 2,
+                  talk: {
+                    watchedAt: '23/10/2020',
+                    rate: 5,
+                  },
+                },
+                {
+                  name: 'Ricardo Xavier Filho',
+                  age: 33,
+                  id: 3,
+                  talk: {
+                    watchedAt: '23/10/2020',
+                    rate: 5,
+                  },
+                },
+              ]),
             );
           });
       });
@@ -169,7 +200,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           .then((responseGet) => {
             const { json } = responseGet;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
@@ -196,7 +227,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           .then((responseGet) => {
             const { json } = responseGet;
             expect(json.message).toBe('Token inválido');
-          })
+          }),
       );
   });
 });

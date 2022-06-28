@@ -50,7 +50,9 @@ class TalkerRepository implements ITalkerRepository {
 
   async searchTalker(search: string): Promise<Talker[]> {
     const data = await helper.readJson();
-    const talkers = data.filter((e: Talker) => e.name.includes(search));
+    const talkers = data.filter((e: Talker) =>
+      e.name.toLowerCase().includes(search.toLowerCase())
+    );
     return talkers;
   }
 }

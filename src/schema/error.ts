@@ -57,8 +57,7 @@ const error = {
   },
   talkIsRequired: {
     status: 400,
-    message:
-      'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    message: 'O campo "talk" é obrigatório',
   },
   invalidWathedAt: {
     status: 400,
@@ -67,6 +66,14 @@ const error = {
   invalidRate: {
     status: 400,
     message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+  },
+  rateIsRequired: {
+    status: 400,
+    message: 'O campo "rate" é obrigatório',
+  },
+  watchedAtIsRequired: {
+    status: 400,
+    message: 'O campo "watchedAt" é obrigatório',
   },
 };
 

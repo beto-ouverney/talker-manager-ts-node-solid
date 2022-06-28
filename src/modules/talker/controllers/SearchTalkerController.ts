@@ -8,8 +8,8 @@ class SearchTalkerController {
   }
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { search } = request.query;
-    const searchTxt = search ? search.toString() : '';
+    const { q } = request.query;
+    const searchTxt = q ? q.toString() : '';
     const result = await this.searchTalkerUseCase.execute(searchTxt);
     return response.status(200).json(result);
   }

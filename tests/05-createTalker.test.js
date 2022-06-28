@@ -11,17 +11,17 @@ const postTalkerMock = {
 
 const url = 'http://localhost:3000';
 
-describe('4 - Crie o endpoint POST /talker', () => {
+describe('5 - Crie o endpoint POST /talker', () => {
   beforeEach(() => {
     const talkerSeed = fs.readFileSync(
       path.join(__dirname, 'seed.json'),
-      'utf8'
+      'utf8',
     );
 
     fs.writeFileSync(
       path.join(__dirname, '..', 'talker.json'),
       talkerSeed,
-      'utf8'
+      'utf8',
     );
   });
 
@@ -53,9 +53,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .expect('status', 201)
           .then((responseCreate) => {
             expect(require('../talker.json')).toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining(postTalkerMock)]
-                )
+              expect.arrayContaining([expect.objectContaining(postTalkerMock)]),
             );
             const { json } = responseCreate;
             expect(json).toEqual(postTalkerMock);
@@ -124,7 +122,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O "name" deve ter pelo menos 3 caracteres'
+              'O "name" deve ter pelo menos 3 caracteres',
             );
           });
       });
@@ -191,7 +189,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'A pessoa palestrante deve ser maior de idade'
+              'A pessoa palestrante deve ser maior de idade',
             );
           });
       });
@@ -225,7 +223,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório',
             );
           });
       });
@@ -260,7 +258,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "rate" é obrigatório',
             );
           });
       });
@@ -295,7 +293,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -330,7 +328,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -365,14 +363,25 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "watchedAt" é obrigatório',
             );
           });
       });
   });
 
   it('Será validado que não é possível cadastrar uma pessoa palestrante com watchedAt sem o formato "dd/mm/aaaa"', async () => {
-    await frisby
+    const dataTestArray = [
+      '42-20-3333',
+      '0/0/0',
+      '12/7/25',
+      '/11/',
+      '01/12',
+      '//',
+      '010332',
+      '02/mar/1988',
+    ];
+
+    const token = await frisby
       .post(`${url}/login`, {
         body: {
           email: 'deferiascomigo@gmail.com',
@@ -380,30 +389,33 @@ describe('4 - Crie o endpoint POST /talker', () => {
         },
       })
       .then((responseLogin) => {
-        const { body } = responseLogin;
-        const result = JSON.parse(body);
-        return frisby
-          .setup({
-            request: {
-              headers: {
-                Authorization: result.token,
-                'Content-Type': 'application/json',
-              },
-            },
-          })
-          .post(`${url}/talker`, {
-            name: 'Zendaya Maree',
-            age: 24,
-            talk: { rate: 5, watchedAt: '42-20-3333' },
-          })
-          .expect('status', 400)
-          .then((responseCreate) => {
-            const { json } = responseCreate;
-            expect(json.message).toBe(
-              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"'
-            );
-          });
+        const { json } = responseLogin;
+        return json.token;
       });
+
+    for (let i = 0; i < dataTestArray.length; i++) {
+      await frisby
+        .setup({
+          request: {
+            headers: {
+              Authorization: token,
+              'Content-Type': 'application/json',
+            },
+          },
+        })
+        .post(`${url}/talker`, {
+          name: 'Zendaya Maree',
+          age: 24,
+          talk: { rate: 5, watchedAt: dataTestArray[i] },
+        })
+        .expect('status', 400)
+        .then((responseCreate) => {
+          const { json } = responseCreate;
+          expect(json.message).toBe(
+            'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+          );
+        });
+    }
   });
 
   it('Será validado que não é possível cadastrar uma pessoa palestrante sem estar autorizado', async () => {
@@ -425,38 +437,41 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
   it('Será validado que não é possível cadastrar uma pessoa palestrante com token inválido', async () => {
-    await frisby
-      .post(`${url}/login`, {
-        body: {
-          email: 'deferiascomigo@gmail.com',
-          password: '12345678',
-        },
-      })
-      .then(() =>
-        frisby
-          .setup({
-            request: {
-              headers: {
-                Authorization: 99999999,
-                'Content-Type': 'application/json',
+    const invalidTokens = [99999999, '99999999', undefined, '123456789012345'];
+    for (let i = 0; i < invalidTokens.length; i++) {
+      await frisby
+        .post(`${url}/login`, {
+          body: {
+            email: 'deferiascomigo@gmail.com',
+            password: '12345678',
+          },
+        })
+        .then(() =>
+          frisby
+            .setup({
+              request: {
+                headers: {
+                  Authorization: invalidTokens[i],
+                  'Content-Type': 'application/json',
+                },
               },
-            },
-          })
-          .post(`${url}/talker`, {
-            name: 'Zendaya Maree',
-            age: 24,
-            talk: { rate: 5, watchedAt: '20/10/2020' },
-          })
-          .expect('status', 401)
-          .then((responseCreate) => {
-            const { json } = responseCreate;
-            expect(json.message).toBe('Token inválido');
-          })
-      );
+            })
+            .post(`${url}/talker`, {
+              name: 'Zendaya Maree',
+              age: 24,
+              talk: { rate: 5, watchedAt: '20/10/2020' },
+            })
+            .expect('status', 401)
+            .then((responseCreate) => {
+              const { json } = responseCreate;
+              expect(json.message).toBe('Token inválido');
+            }),
+        );
+    }
   });
 });

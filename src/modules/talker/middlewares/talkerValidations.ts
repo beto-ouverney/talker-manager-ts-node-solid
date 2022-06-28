@@ -13,8 +13,12 @@ function checkEmptyValues(name: string, age: number, talk: Talk) {
     return error.talkIsRequired;
   }
   const { watchedAt, rate } = talk;
-  if (!watchedAt || rate === undefined) {
-    return error.talkIsRequired;
+  if (!watchedAt) {
+    return error.watchedAtIsRequired;
+  }
+  if (rate === undefined) {
+    console.log(rate);
+    return error.rateIsRequired;
   }
 }
 
@@ -49,6 +53,7 @@ function talkerValidations(req: Request, res: Response, next: NextFunction) {
       .json({ message: error.invalidWathedAt.message });
   }
   if (talk.rate < 1 || talk.rate > 5) {
+    console.log(error.invalidRate.message);
     return res
       .status(error.invalidRate.status)
       .json({ message: error.invalidRate.message });
